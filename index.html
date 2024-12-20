@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambula - Responsive Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="Images/simboloLogo.svg" alt="Ambula Logo" class="logo">
+            <img src="Images/nomeBranco.svg" alt="Ambula Name" class="name" onclick="resetToFirstPage()" style="cursor: pointer;">
+        </div>
+    </header>
+    <!-- Description Section -->
+    <div id="description-section" class="description-section">
+        <h1>Bem-vindo(a) à Ambula</h1>
+        <p>O seu parceiro em transporte médico eficiente e confiável. </p>
+        <p>Comece agora para solicitar e acompanhar os seus transportes médicos.</p>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="content-wrapper">
+        <!-- Image Section -->
+        <div class="image-section">
+            <div class="image-container">
+                <img id="dynamic-image" src="Images/ambulancia.svg" alt="Ambulance" class="ambulance-image">
+            </div>
+            </div>
+
+        <!-- Form Section -->
+        <div id="form-section" class="form-section" style="display: block;">
+            <h2>Agendar transporte</h2>
+            <form>
+                <div class="input-group">
+                    <label for="pickup">
+                        <img src="Images/location.svg" alt="Location Icon" class="icon">
+                    </label>
+                    <input type="text" id="pickup" placeholder="Local de recolha">
+                </div>
+                <div class="input-group">
+                    <label for="destination">
+                        <img src="Images/search.svg" alt="Search Icon" class="icon">
+                    </label>
+                    <input type="text" id="destination" placeholder="Local de destino">
+                </div>
+                <h3>Qual a data e hora do transporte?</h3>
+                <div class="input-group" id="date-input-group">
+                    <input type="date" id="date">
+                </div>
+                <div class="input-group" id="time-input-group">
+                    <input type="time" id="time" value="09:00">
+                </div>
+                <button type="button" class="button" id="verify-button" disabled onclick="changeToResumo()">Verificar Trajeto</button>
+            </form>
+            </div>
+        
+        <!-- Resumo Pedido Section -->
+        <div id="resume-section" class="resume-page" style="display: none;">
+            <!-- Header -->
+            <header class="resume-header">
+                <button class="back-button" onclick="goBackToForm()">
+                    <img src="Images/back.svg" alt="Back">
+                </button>
+                <h2>Resumo Pedido</h2>
+            </header>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <span class="progress active"></span>
+                    <span class="progress"></span>
+                    <span class="progress"></span>
+                    <span class="progress"></span>
+                    <span class="progress"></span>
+                </div>
+                <p class="progress-title">Resumo do Pedido</p>
+
+                <!-- Summary Card -->
+            <div class="summary-card">
+                <div class="card-content">
+                    <!-- Location Section -->
+                    <div class="location-date-section">
+                        <p><img src="Images/location.svg" alt="Location"><strong>Local de recolha:</strong> <span id="pickup-summary"></span></p>
+                        <p><img src="Images/location.svg" alt="Location"><strong>Local de destino:</strong> <span id="destination-summary"></span></p>
+                        <p><img src="Images/calendar.svg" alt="Calendar"><strong>Data:</strong> <span id="date-summary"></span></p>
+                        <p><img src="Images/clock.svg" alt="Clock"><strong>Hora:</strong> <span id="time-summary"></span></p>
+                    </div>
+
+                    <!-- Round Trip Section -->
+                    <div class="round-trip-section">
+                        <label class="toggle-container">
+                            <input type="checkbox" id="round-trip-toggle" onclick="updateTotal()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <p class="round-trip-label"><strong>Ida e volta</strong></p>
+                        <p class="round-trip-discount">-10% Para Ida e Volta</p>
+                    </div>
+                    
+                    <!-- Total Section -->
+                    <div class="total-section">
+                        <p><strong>Total</strong></p>
+                        <p id="total-price" class="total-price"></p>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Button -->
+                <div class="action-buttons">
+                    <button class="continue-button" onclick="goToDetails()">CONTINUAR</button>
+                    <!-- <a href="#" class="cancel-link">Cancelar</a> -->
+                </div>
+
+            </div>
+
+        <!-- Details Section -->
+        <div id="details-section" class="details-page" style="display: none;">
+        <!-- Header -->
+           <header class="resume-header">
+               <button class="back-button" onclick="goBackToResumo()">
+                   <img src="Images/back.svg" alt="Back">
+               </button>
+               <h2>Recolha de Dados</h2>
+           </header>
+
+        <!-- Progress Bar -->
+           <div class="progress-bar">
+               <span class="progress active"></span>
+               <span class="progress active"></span>
+               <span class="progress"></span>
+               <span class="progress"></span>
+               <span class="progress"></span>
+           </div>
+           <p class="progress-title">Recolha de Dados</p>
+
+           <!-- Options Section -->
+        <div class="options-section">
+            <p>A quem se destina o transporte?</p>
+            <div class="options">
+                <button type="button" class="option-button active" data-value="para-mim">Para mim</button>
+                <button type="button" class="option-button" data-value="para-outro">Para outro</button>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <form id="details-form">
+            
+            <div class="input-group">
+                <label for="transport-reason">Qual o motivo do transporte?</label>
+                <select id="transport-reason">
+                    <option value="general">Transporte Geral</option>
+                    <option value="consultation">Consulta/Tratamento</option>
+                    <option value="emergency">Urgência Médica</option>
+                    <option value="alta">Alta Hospitalar</option>
+                    <option value="transfer">Transferência Hospitalar</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="user-name">Nome do Utente:</label>
+                <input type="text" id="user-name" placeholder="Nome do Utente" required>
+            </div>
+
+            <div class="input-group" id="user-phone-group">
+                <label for="phone-number">Número de Telemóvel:</label>
+                <input type="text" id="phone-number" placeholder="ex: 987 654 321">
+            </div>
+
+            <div class="input-group" id="user-email-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="ex: ola@gmail.com">
+            </div>
+
+            <div class="input-group">
+                <label for="weight">Peso:</label>
+                <input type="text" id="weight" placeholder="kg">
+            </div>
+
+            <div class="input-group">
+                <label for="gender">Sexo:</label>
+                <select id="gender">
+                    <option value="female">Feminino</option>
+                    <option value="male">Masculino</option>
+                    <option value="other">Prefiro Não Informar</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="age">Idade:</label>
+                <input type="number" id="age" placeholder="ex: 50">
+            </div>
+
+            <!-- Divider Line -->
+            <hr class="divider">
+
+            <!-- Responsible Person's Details -->
+            <div id="responsavel-fields" class="hidden">
+                <div class="input-group">
+                    <label for="responsavel-name">Nome do Responsável:</label>
+                    <input type="text" id="responsavel-name" placeholder="Nome do Responsável">
+                </div>
+
+                <div class="input-group">
+                    <label for="responsavel-phone">Número de Telemóvel do Responsável:</label>
+                    <input type="text" id="responsavel-phone" placeholder="ex: 987 654 321">
+                </div>
+
+                <div class="input-group">
+                    <label for="responsavel-email">Email do Responsável:</label>
+                    <input type="email" id="responsavel-email" placeholder="ex: responsavel@gmail.com">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" id="submit-details-button" class="continue-button" onclick="goToEquip()">CONTINUAR</button>
+            </div>
+        </form>
+
+            </div>
+
+        <!-- Equipamentos Section -->
+        <div id="equip-section" class="equip-page" style="display: none;">
+            <!-- Header -->
+            <header class="resume-header">
+                <button class="back-button" onclick="goBackToDetails()">
+                    <img src="Images/back.svg" alt="Back">
+                </button>
+                <h2>Agendar transporte</h2>
+            </header>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <span class="progress active"></span>
+                <span class="progress active"></span>
+                <span class="progress active"></span>
+                <span class="progress"></span>
+                <span class="progress"></span>
+            </div>
+            <p class="progress-title">Transporte e Equipamento</p>
+
+            <!-- Form Section -->
+            <div class="equip-form">
+              <div class="section" data-main="acamado">
+                  <div class="text">
+                      <h3>Acamado / Maca</h3>
+                      <p>Utente sem condição de sentar-se ou ser transportado de outra forma.</p>
+                  </div>
+                  <input type="radio" name="main-option" class="equip-checkbox" checked />
+              </div>
+          
+              <div class="section" data-main="cadeira">
+                  <div class="text">
+                      <h3>Cadeira de rodas</h3>
+                      <p>Utente em cadeira de rodas temporariamente ou definitivamente.</p>
+                  </div>
+                  <input type="radio" name="main-option" class="equip-checkbox" />
+              </div>
+          
+              <div class="section" data-main="autonoma">
+                  <div class="text">
+                      <h3>Pessoa Autónoma</h3>
+                      <p>Utente consegue andar sozinho ou com ajuda de andarilhos.</p>
+                  </div>
+                  <input type="radio" name="main-option" class="equip-checkbox" />
+              </div>
+          
+              <h3>Equipamentos e Extras:</h3>
+          
+              <div class="section" data-extra="oxigenoterapia">
+                  <div class="text">
+                      <h3>Oxigenoterapia + €10,00</h3>
+                      <p>Utente com baixa saturação e precisa de oxigenação forçada.</p>
+                  </div>
+                  <input type="checkbox" value="oxigenoterapia" />
+              </div>
+          
+              <div class="section" data-extra="cadeira">
+                  <div class="text">
+                      <h3>Aluguer de Cadeira + €10,00</h3>
+                      <p>Deixamos uma cadeira sob os seus cuidados, e recolhemos no retorno.</p>
+                  </div>
+                  <input type="checkbox" value="cadeira" />
+              </div>
+          
+              <div class="section" data-extra="maca">
+                  <div class="text">
+                      <h3>Maca Coquille + €20,00</h3>
+                      <p>Maca especial, utilizada em fraturas de modo geral.</p>
+                  </div>
+                  <input type="checkbox" value="maca" />
+              </div>
+          
+              <div class="section" data-extra="monitorizacao">
+                  <div class="text">
+                      <h3>Monitorização Cardíaca + €30,00</h3>
+                      <p>Monitorização de ECG, respiração e (ou) saturação periférica de oxigênio.</p>
+                  </div>
+                  <input type="checkbox" value="monitorizacao" />
+              </div>
+          </div>
+          
+
+                <div class="action-buttons">
+                    <button type="button" id="submit-details-button" class="continue-button" onclick="goToConfirm()">CONTINUAR</button>
+                </div>
+            </div>
+        
+        <!-- Confirmação Section -->
+        <div id="confirm-section" class="confirm-page" style="display: none;">
+            <!-- Header -->
+            <header class="resume-header">
+                <button class="back-button" onclick="goBackToEquip()">
+                    <img src="Images/back.svg" alt="Back">
+                </button>
+                <h2>Confirmação dos dados de transporte</h2>
+            </header>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <span class="progress active"></span>
+                <span class="progress active"></span>
+                <span class="progress active"></span>
+                <span class="progress active"></span>
+                <span class="progress"></span>
+            </div>
+            <p class="progress-title">Confirmação dos dados de transporte</p>
+
+            <!-- Summary Card -->
+            <div class="summary-container">
+                <!-- User Details Section -->
+                <div class="summary-section">
+                    <h3>Dados do utente:</h3>
+                    <div class="summary-box">
+                        <p class="user-name-confirm"><strong>Nome: </strong><span id="nome-utente-summary"></span></p>
+                        <div class="dados-utente-confirm">
+                            <div class="data-item">
+                                <strong>Idade:</strong> <span id="age-summary"></span>
+                            </div>
+                            <div class="data-item">
+                                <strong>Peso:</strong> <span id="weight-summary"></span>
+                            </div>
+                            <div class="data-item">
+                                <strong>Sexo:</strong> <span id="sexo-summary"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pickup Location -->
+                <div class="summary-section">
+                    <h3>Local de Recolha:</h3>
+                    <div class="summary-box">
+                        <div class="location-line">
+                            <img src="Images/location.svg" alt="Location Icon">
+                            <p><span id="pickup-summary2"></span></p>
+                        </div>
+                        <div class="icon-input">
+                            <input id="comprec" type="text" placeholder="ex: cama, quarto, piso, porta">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destination Location -->
+                <div class="summary-section">
+                    <h3>Local de Destino:</h3>
+                    <div class="summary-box">
+                        <div class="location-line">
+                            <img src="Images/location.svg" alt="Location Icon">
+                            <p><span id="destination-summary2"></span></p>
+                        </div>
+                        <div class="icon-input">
+                            <input id="compdes" type="text" placeholder="ex: cama, quarto, piso, porta">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transport Details -->
+                <div class="summary-section">
+                    <h3>Detalhes do transporte:</h3>
+                    <div class="summary-box">
+                        <div class="data-hora-confirm">
+                            <p><img src="Images/calendar.svg" alt="Calendar">  <span id="date-summary2"></span></p>
+                            <p><img src="Images/clock.svg" alt="Clock">  <span id="time-summary2"></span></p>
+                        </div>
+                        <p><strong>Motivo:</strong> <span id="motivo-summary"></span></p>
+                        <p><strong>Forma de transporte:</strong> <span id="forma-summary"></span></p>
+                        <p><strong>Equipamentos Extra:</strong></p>
+                        <ul>
+                            <li><span id="extra1-summary"></span></li>
+                            <li><span id="extra2-summary"></span></li>
+                            <li><span id="extra3-summary"></span></li>
+                            <li><span id="extra4-summary"></span></li>
+                        </ul>
+                        <textarea id="observacoes" placeholder="Observações"></textarea>
+                    </div>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="summary-section">
+                    <h3>Valor a pagar:</h3>
+                    <div class="summary-box">
+                        <p id="transport-price"><strong>Transporte:</strong></p>
+                        <p id="extras-price"><strong>Equipamentos extra:</strong></p>
+                        <hr>
+                        <p class="total"><strong>Total a pagar:</strong> <span id="total-price-confirmation">60,00€</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button -->
+            <div class="action-buttons">
+                <button class="continue-button" onclick="goToPay()">CONTINUAR</button>
+            </div>
+        </div>
+
+        <!-- Pagamento Section-->
+        <div id="pay-section" class="pay-page" style="display: none;">
+            <!-- Header -->
+            <header class="resume-header">
+                <button class="back-button" onclick="goBackToConfirm()" id="back-button-payment">
+                  <img src="Images/back.svg" alt="Back">
+                </button>
+                <h2>Pagamento</h2>
+            </header>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <span class="progress active"></span>
+                    <span class="progress active"></span>
+                    <span class="progress active"></span>
+                    <span class="progress active"></span>
+                    <span class="progress active"></span>
+                </div>
+                <p class="progress-title">Pagamento</p>
+
+                <!-- Payment Method Section -->
+                <div class="summary-section">
+                    <h3 id="forma-pagamento-h3">Forma de pagamento</h3>
+                    <div class="summary-box">
+                        <!-- Pagamento referência multibanco -->
+                        <label class="payment-option">
+                            <div class="main-content">
+                                <div class="option-content">
+                                    <img src="Images/icon-multibanco.png" alt="Multibanco Icon">
+                                    <p>Pagamento referência multibanco</p>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" name="payment-method" value="multibanco" checked>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <!-- Pagamento MBWay -->
+                        <label class="payment-option">
+                            <div class="main-content">
+                                <div class="option-content">
+                                    <img src="Images/icon-mbway.png" alt="MBWay Icon">
+                                    <p>Pagamento MBWay</p>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" name="payment-method" value="mbway" onclick="toggleMbway(this)">
+                                </div>
+                            </div>
+                            <div class="additional-input" id="mbway">
+                                <label for="mbway-phone-number">Número de Telemóvel:</label>
+                                <input type="text" id="mbway-phone-number" placeholder="ex: 987 654 321">
+                            </div>
+                        </label>
+
+                        <!-- Pagamento Link -->
+                        <label class="payment-option">
+                            <div class="main-content">
+                                <div class="option-content">
+                                    <img src="Images/icon-link.svg" alt="Link Icon">
+                                    <p>Pagamento Link</p>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" name="payment-method" value="link">
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                        <div class="input-group" id="NIF">
+                            <label for="phone-number">NIF (Opcional):</label>
+                            <input type="text" id="nif" placeholder="ex: 123456789">
+                        </div>
+
+                        
+
+                <!-- Button -->
+                <div class="action-buttons" id="pay-now-button">
+                    <button class="continue-button pay-now-button" onclick="handlePayment()">PAGAR AGORA<span id="pay-now-value"></span></button>
+                    <!-- <a href="#" class="cancel-link">Cancelar</a> -->
+                </div>
+
+        </div>
+        
+    </div>
+
+    <script src="scripts/payment.js"></script>
+    <script src="scripts/airtable.js"></script>
+    <script src="scripts/pricing.js"></script>
+    <script src="scripts/distance.js"></script>
+    <script src="scripts/autocomplete.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkuGwkSA-LHcRedNwDGjNUDYOdcM0Z5V8&libraries=places&region=pt&callback=initializePlacesAutocomplete">
+</script>
+    <script src="scripts/payment.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
